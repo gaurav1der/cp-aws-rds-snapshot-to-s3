@@ -2,7 +2,7 @@
 
 This utility helps to copy the current day aws rds snapshot to the S3 bucket. This is to maintain the backup of rds snapshot in another region for DR needs.
 
-**Note: This utility uses the aws go sdk to perform operation in asws**
+**Note: This utility uses the aws go sdk to perform operation in aws**
 
 # Getting Started
 
