@@ -30,6 +30,8 @@ func main() {
 	roleArn := os.Getenv("AWS_ROLE_ARN")
 	kmsKey := os.Getenv("AWS_KEY")
 	bucketName := os.Getenv("AWS_BUCKET_NAME")
+	rdsSnapshotName := os.Getenv("RDS_SNAPSHOT")
+	exportRDSSnapshotName := os.Getenv("EXPORT_RDS_SNAPSHOT")
 
 	sess, err := session.NewSession(&aws.Config{
 		Region:      aws.String(awsRegion),
@@ -45,14 +47,14 @@ func main() {
 
 	currentTime := time.Now()
 	sanpshotTime := currentTime.Format("2006-01-02")
-	gitPrimeSnapshot := "<snapshot prefix>" + sanpshotTime
+	rdsSnapshot := rdsSnapshotName + sanpshotTime
 	IndentifierSanpshotTime := currentTime.Format("20060102")
-	exportIdentifier := "export snapshot prefix>" + IndentifierSanpshotTime
+	exportIdentifier := exportRDSSnapshotName + IndentifierSanpshotTime
 
 	// Getting latest snapsnot from rds snapshot list
 	for _, s := range result.DBSnapshots {
 
-		if strings.Contains(*s.DBSnapshotArn, gitPrimeSnapshot) {
+		if strings.Contains(*s.DBSnapshotArn, rdsSnapshot) {
 			fmt.Printf("* %s with status %s\n",
 				aws.StringValue(s.DBSnapshotArn), aws.StringValue(s.Status))
 
@@ -98,6 +100,7 @@ func main() {
 		}
 
 	}
+
 }
 
 func exitErrorf(msg string, args ...interface{}) {
